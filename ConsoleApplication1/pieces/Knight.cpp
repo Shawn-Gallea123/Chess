@@ -4,7 +4,7 @@ char Knight::GetSymbol() {
 	return 'N';
 }
 
-std::vector<std::pair<int, int>> Knight::GetPossibleMovementSpots(const Board* board) const {
+std::vector<std::pair<int, int>> Knight::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
 
 	// Right

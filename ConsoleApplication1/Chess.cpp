@@ -17,7 +17,10 @@ void Chess::Run() {
         if (!WhiteTurn())
             break;
         board_->PrintBoard();
-        CheckForChecks();
+        if (board_->CheckForChecks(Piece::Team::WHITE))
+            std::cout << "CHECK, white king must move." << std::endl;
+        if (board_->CheckForChecks(Piece::Team::BLACK))
+            std::cout << "CHECK, black king must move." << std::endl;
     }
 }
 
@@ -48,8 +51,4 @@ bool Chess::WhiteTurn() {
 
 void Chess::BlackTurn() {
     // TODO: Switch to boolean, add 2P/AI turn.
-}
-
-void Chess::CheckForChecks() {
-
 }

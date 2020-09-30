@@ -22,7 +22,7 @@ bool Piece::CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, co
 	Piece* piece = board->GetPiece(x, y);
 	if (piece && piece->GetTeam() != team_) {
 		spots.emplace_back(x, y);
-		return true;
+		return false;
 	}
 	else if (!piece) {
 		spots.emplace_back(x, y);
@@ -31,4 +31,12 @@ bool Piece::CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, co
 	else {
 		return false;
 	}
+}
+
+int Piece::GetX() {
+	return x_;
+}
+
+int Piece::GetY() {
+	return y_;
 }

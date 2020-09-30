@@ -4,7 +4,7 @@ char Queen::GetSymbol() {
 	return 'Q';
 }
 
-std::vector<std::pair<int, int>> Queen::GetPossibleMovementSpots(const Board* board) const {
+std::vector<std::pair<int, int>> Queen::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
 
 	// Right

@@ -7,7 +7,7 @@ char Rook::GetSymbol() {
 	return 'R';
 }
 
-std::vector<std::pair<int, int>> Rook::GetPossibleMovementSpots(const Board* board) const {
+std::vector<std::pair<int, int>> Rook::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
 	
 	// Right

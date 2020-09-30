@@ -8,7 +8,7 @@ char Bishop::GetSymbol() {
 	return 'B';
 }
 
-std::vector<std::pair<int, int>> Bishop::GetPossibleMovementSpots(const Board* board) const {
+std::vector<std::pair<int, int>> Bishop::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
 	
 	// North-West

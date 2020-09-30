@@ -6,7 +6,7 @@ char Pawn::GetSymbol() {
 	return 'P';
 }
 
-std::vector<std::pair<int, int>> Pawn::GetPossibleMovementSpots(const Board* board) const {
+std::vector<std::pair<int, int>> Pawn::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
 	int direction = team_ == Team::WHITE ? 1 : -1;
 	int step = y_ + direction;
@@ -17,12 +17,15 @@ std::vector<std::pair<int, int>> Pawn::GetPossibleMovementSpots(const Board* boa
 		return spots;
 
 	// Left attack
-	if (x_ > 0 && board->GetPiece(x_ - 1, step) && board->GetPiece(x_ - 1, step)->GetTeam() != team_)
+	if (x_ - 1 > 0 && board->GetPiece(x_ - 1, step) && board->GetPiece(x_ - 1, step)->GetTeam() != team_)
 		spots.emplace_back(x_ - 1, step);
 
 	// Right attack
-	if (x_ < 8 && board->GetPiece(x_ + 1, step) && board->GetPiece(x_ + 1, step)->GetTeam() != team_)
+	if (x_ + 1 < 8 && board->GetPiece(x_ + 1, step) && board->GetPiece(x_ + 1, step)->GetTeam() != team_)
 		spots.emplace_back(x_ + 1, step);
+
+	if (attacks_only)
+		return spots;
 
 	// Step
 	if (!board->GetPiece(x_, step)) {
