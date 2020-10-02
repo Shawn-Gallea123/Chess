@@ -145,6 +145,8 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
+    <ClCompile Include="display\Display.cpp" />
+    <ClCompile Include="display\Display2D.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Opponent.cpp" />
     <ClCompile Include="pieces\Bishop.cpp" />

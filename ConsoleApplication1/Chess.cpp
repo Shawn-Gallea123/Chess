@@ -4,12 +4,15 @@
 #include <memory>
 
 #include "Board.h"
+#include "display/Display2D.h"
 #include "Opponent.h"
 
 Chess::Chess() : board_(std::make_unique<Board>()) {}
 
 void Chess::Run() {
     board_->PrintBoard();
+    Display2D display_2d(board_.get());
+    display_2d.DrawBoard();
 
     ChooseDifficulty();
 
@@ -21,6 +24,7 @@ void Chess::Run() {
             std::cout << "CHECK, white king must move." << std::endl;
         if (board_->CheckForChecks(Piece::Team::BLACK))
             std::cout << "CHECK, black king must move." << std::endl;
+        display_2d.DrawBoard();
     }
 }
 
