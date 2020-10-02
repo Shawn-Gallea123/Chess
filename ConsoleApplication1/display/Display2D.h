@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Display.h"
+#include "GraphicalDisplay.h"
 
 class Board;
 
-class Display2D : public Display {
+class Display2D : public GraphicalDisplay {
 public:
 	void DrawBoard() override;
 
 private:
-	using Display::Display;
+	using GraphicalDisplay::GraphicalDisplay;
 };

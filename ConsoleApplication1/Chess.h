@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Board.h"
+#include "display/Display.h"
 #include "Opponent.h"
 
 class Chess {
@@ -18,4 +19,6 @@ private:
 
 	std::unique_ptr<Board> board_;
 	std::unique_ptr<Opponent> opponent_;
+
+	std::unique_ptr<Display> display_;
 };

@@ -146,7 +146,9 @@
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="display\Display.cpp" />
+    <ClCompile Include="display\GraphicalDisplay.cpp" />
     <ClCompile Include="display\Display2D.cpp" />
+    <ClCompile Include="display\TextDisplay.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Opponent.cpp" />
     <ClCompile Include="pieces\Bishop.cpp" />
@@ -161,7 +163,9 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Chess.h" />
     <ClInclude Include="display\Display.h" />
+    <ClInclude Include="display\GraphicalDisplay.h" />
     <ClInclude Include="display\Display2D.h" />
+    <ClInclude Include="display\TextDisplay.h" />
     <ClInclude Include="Opponent.h" />
     <ClInclude Include="pieces\Bishop.h" />
     <ClInclude Include="pieces\King.h" />

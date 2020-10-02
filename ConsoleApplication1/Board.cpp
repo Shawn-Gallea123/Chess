@@ -29,31 +29,6 @@ Board::~Board() {
 			delete board_[i][j];
 }
 
-void Board::PrintBoard() {
-	for (int i = 0; i < 16; ++i)
-		std::cout << '-';
-	std::cout << std::endl;
-	for (int y = 7; y >= 0; --y)
-		for (int x = 0; x < 8; ++x) {
-			if (x == 0)
-				std::cout << '|';
-
-			if (board_[x][y])
-				std::cout << board_[x][y]->GetSymbol();
-			else
-				std::cout << '.';
-
-			if (x == 7) {
-				std::cout << '|' << std::endl;
-				for (int i = 0; i < 16; ++i)
-					std::cout << '-';
-				std::cout << std::endl;
-			}
-			else
-				std::cout << '|';
-		}
-}
-
 bool Board::Move(int x, int y, int dest_x, int dest_y) {
 	Piece* piece = board_[x][y];
 	if (x < 0 || x > 7 || y < 0 || y > 7 || dest_x < 0 || dest_x > 7 || dest_y < 0 || dest_y > 7 || !piece)

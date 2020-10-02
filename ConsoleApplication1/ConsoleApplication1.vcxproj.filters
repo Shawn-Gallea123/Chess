@@ -54,7 +54,13 @@
     <ClCompile Include="display\Display2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="display\GraphicalDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="display\Display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display\TextDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,9 +89,6 @@
     <ClInclude Include="pieces\Rook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="display\Display.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="display\Display2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,6 +96,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Opponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\GraphicalDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\Display.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\TextDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

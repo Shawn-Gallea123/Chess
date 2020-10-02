@@ -10,7 +10,6 @@ public:
 	Board();
 	~Board();
 
-	void PrintBoard();
 	bool Move(int x, int y, int dest_x, int dest_y);
 	Piece* GetPiece(int x, int y) const;
 	bool CheckForChecks(Piece::Team team);

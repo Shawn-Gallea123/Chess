@@ -4,27 +4,23 @@
 #include <memory>
 
 #include "Board.h"
-#include "display/Display2D.h"
 #include "Opponent.h"
+#include "display/TextDisplay.h"
 
-Chess::Chess() : board_(std::make_unique<Board>()) {}
+Chess::Chess() : board_(std::make_unique<Board>()), display_(std::make_unique<TextDisplay>(board_.get())) {}
 
 void Chess::Run() {
-    board_->PrintBoard();
-    Display2D display_2d(board_.get());
-    display_2d.DrawBoard();
-
+    display_->DrawBoard();
     ChooseDifficulty();
 
     while (true) {
         if (!WhiteTurn())
             break;
-        board_->PrintBoard();
+        display_->DrawBoard();
         if (board_->CheckForChecks(Piece::Team::WHITE))
             std::cout << "CHECK, white king must move." << std::endl;
         if (board_->CheckForChecks(Piece::Team::BLACK))
             std::cout << "CHECK, black king must move." << std::endl;
-        display_2d.DrawBoard();
     }
 }
 
