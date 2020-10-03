@@ -4,7 +4,7 @@
 
 class TextDisplay : public Display {
 public:
-	void DrawBoard() override;
+	bool DrawBoard() override;
 
 private:
 	using Display::Display;

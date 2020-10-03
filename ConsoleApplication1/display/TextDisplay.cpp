@@ -4,7 +4,7 @@
 
 #include "../Board.h"
 
-void TextDisplay::DrawBoard() {
+bool TextDisplay::DrawBoard() {
 	for (int i = 0; i < 16; ++i)
 		std::cout << '-';
 	std::cout << std::endl;
@@ -27,4 +27,5 @@ void TextDisplay::DrawBoard() {
 			else
 				std::cout << '|';
 		}
+	return true;
 }

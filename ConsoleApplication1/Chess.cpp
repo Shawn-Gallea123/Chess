@@ -5,18 +5,20 @@
 
 #include "Board.h"
 #include "Opponent.h"
+#include "display/Display2D.h"
 #include "display/TextDisplay.h"
 
-Chess::Chess() : board_(std::make_unique<Board>()), display_(std::make_unique<TextDisplay>(board_.get())) {}
+Chess::Chess() : board_(std::make_unique<Board>()), display_(std::make_unique<Display2D>(board_.get())) {}
 
 void Chess::Run() {
     display_->DrawBoard();
     ChooseDifficulty();
 
     while (true) {
-        if (!WhiteTurn())
+       // if (!WhiteTurn())
+       //     break;
+        if (!display_->DrawBoard())
             break;
-        display_->DrawBoard();
         if (board_->CheckForChecks(Piece::Team::WHITE))
             std::cout << "CHECK, white king must move." << std::endl;
         if (board_->CheckForChecks(Piece::Team::BLACK))
