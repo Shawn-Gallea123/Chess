@@ -67,6 +67,7 @@ Display2D::Display2D(Board* board) : GraphicalDisplay(board) {
 bool Display2D::DrawBoard() {
 	if (glfwWindowShouldClose(window_))
 		return false;
+	ProcessInput();
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program_);
@@ -107,4 +108,13 @@ void Display2D::CompileShaders() {
 	glUseProgram(shader_program_);
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
+}
+
+void Display2D::ProcessInput() {
+	if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window_, true);
+	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_RELEASE)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
