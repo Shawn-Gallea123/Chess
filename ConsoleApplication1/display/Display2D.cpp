@@ -1,6 +1,9 @@
 #include "Display2D.h"
 
 #include <fstream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <streambuf>
 #include <string>
@@ -68,11 +71,37 @@ bool Display2D::DrawBoard() {
 	if (glfwWindowShouldClose(window_))
 		return false;
 	ProcessInput();
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program_);
-	glBindVertexArray(VAO_);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	glm::mat4 M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-0.875f, -0.875f, 0.0f));
+	glm::mat4 start = M;
+	bool white_tile = false;
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
+			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
+			if (board_->GetPiece(j, i))
+				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
+			else
+				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+			glBindVertexArray(VAO_);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			if (j == 7) {
+				start = glm::translate(start, glm::vec3(0.0f, 0.25f, 0.0f));
+				M = start;
+			}
+			else {
+				white_tile = !white_tile;
+				M = glm::translate(M, glm::vec3(0.25f, 0.0f, 0.0f));
+			}
+		}
+	}
+
 	glfwSwapBuffers(window_);
 	glfwPollEvents();
 	return true;

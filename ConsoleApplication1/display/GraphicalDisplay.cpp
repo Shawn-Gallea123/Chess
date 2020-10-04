@@ -21,7 +21,7 @@ GraphicalDisplay::GraphicalDisplay(Board* board) : Display(board) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// TODO: Fullscreen support
-	window_ = glfwCreateWindow(800, 600, "Chess", NULL, NULL);
+	window_ = glfwCreateWindow(800, 800, "Chess", NULL, NULL);
 	if (window_ == NULL)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
@@ -37,7 +37,7 @@ GraphicalDisplay::GraphicalDisplay(Board* board) : Display(board) {
 	}
 
 	// TODO: Fullscreen support
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, 800, 800);
 	glfwSetFramebufferSizeCallback(window_, FramebufferSizeCallback);
 }
 
