@@ -1,5 +1,15 @@
 #include "King.h"
 
+int King::white_texture_ = -1;
+int King::black_texture_ = -1;
+
+King::King(int x, int y, Team team) : Piece(x, y, team) {
+	if (white_texture_ == -1)
+		white_texture_ = Generate2DTexture("sprites/white_king.png");
+	if (black_texture_ == -1)
+		black_texture_ = Generate2DTexture("sprites/black_king.png");
+}
+
 char King::GetSymbol() {
 	return 'K';
 }

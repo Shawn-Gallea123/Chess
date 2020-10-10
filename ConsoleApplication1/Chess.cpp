@@ -8,11 +8,13 @@
 #include "display/Display2D.h"
 #include "display/TextDisplay.h"
 
-Chess::Chess() : board_(std::make_unique<Board>()), display_(std::make_unique<Display2D>(board_.get())) {}
+Chess::Chess() : display_(std::make_unique<Display2D>()), board_(std::make_unique<Board>()) {
+    display_->SetBoard(board_.get());
+}
 
 void Chess::Run() {
     display_->DrawBoard();
-    ChooseDifficulty();
+    //ChooseDifficulty();
 
     while (true) {
        // if (!WhiteTurn())

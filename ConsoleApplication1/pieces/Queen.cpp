@@ -1,5 +1,15 @@
 #include "Queen.h"
 
+int Queen::white_texture_ = -1;
+int Queen::black_texture_ = -1;
+
+Queen::Queen(int x, int y, Team team) : Piece(x, y, team) {
+	if (white_texture_ == -1)
+		white_texture_ = Generate2DTexture("sprites/white_queen.png");
+	if (black_texture_ == -1)
+		black_texture_ = Generate2DTexture("sprites/black_queen.png");
+}
+
 char Queen::GetSymbol() {
 	return 'Q';
 }

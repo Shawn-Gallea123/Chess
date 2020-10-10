@@ -14,7 +14,7 @@ void FramebufferSizeCallback(GLFWwindow* window, int width, int height) {
 
 }
 
-GraphicalDisplay::GraphicalDisplay(Board* board) : Display(board) {
+GraphicalDisplay::GraphicalDisplay() {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

@@ -3,6 +3,16 @@
 #include "../Board.h"
 #include "Piece.h"
 
+int Rook::white_texture_ = -1;
+int Rook::black_texture_ = -1;
+
+Rook::Rook(int x, int y, Team team) : Piece(x, y, team) {
+	if (white_texture_ == -1)
+		white_texture_ = Generate2DTexture("sprites/white_rook.png");
+	if (black_texture_ == -1)
+		black_texture_ = Generate2DTexture("sprites/black_rook.png");
+}
+
 char Rook::GetSymbol() {
 	return 'R';
 }

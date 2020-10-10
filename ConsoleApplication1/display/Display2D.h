@@ -6,7 +6,7 @@ class Board;
 
 class Display2D : public GraphicalDisplay {
 public:
-	Display2D(Board* board);
+	Display2D();
 	bool DrawBoard() override;
 
 private:

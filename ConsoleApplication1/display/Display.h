@@ -4,11 +4,13 @@ class Board;
 
 class Display {
 public:
-	Display(Board* board);
+	Display();
 	virtual ~Display();
+
+	void SetBoard(Board* board);
 
 	virtual bool DrawBoard() = 0;
 
 protected:
-	Board* board_;
+	Board* board_ = nullptr;
 };

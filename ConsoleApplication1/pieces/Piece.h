@@ -24,6 +24,7 @@ public:
 
 protected:
 	bool CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board) const;
+	unsigned int Generate2DTexture(const std::string& path);
 
 	int x_;
 	int y_;

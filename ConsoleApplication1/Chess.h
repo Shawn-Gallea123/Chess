@@ -17,8 +17,7 @@ private:
 	bool WhiteTurn();
 	void BlackTurn();
 
+	std::unique_ptr<Display> display_;
 	std::unique_ptr<Board> board_;
 	std::unique_ptr<Opponent> opponent_;
-
-	std::unique_ptr<Display> display_;
 };

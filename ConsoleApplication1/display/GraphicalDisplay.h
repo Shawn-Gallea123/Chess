@@ -9,7 +9,7 @@ class Board;
 
 class GraphicalDisplay : public Display {
 public:
-	GraphicalDisplay(Board* board);
+	GraphicalDisplay();
 	~GraphicalDisplay() override;
 
 protected:

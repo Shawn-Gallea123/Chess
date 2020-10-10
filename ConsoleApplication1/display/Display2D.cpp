@@ -51,7 +51,7 @@ namespace {
 	}
 }
 
-Display2D::Display2D(Board* board) : GraphicalDisplay(board) {
+Display2D::Display2D() {
 	CompileShaders();
 	glGenVertexArrays(1, &VAO_);
 	glBindVertexArray(VAO_);
@@ -71,7 +71,7 @@ bool Display2D::DrawBoard() {
 	if (glfwWindowShouldClose(window_))
 		return false;
 	ProcessInput();
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program_);
 

@@ -1,5 +1,9 @@
 #include "Display.h"
 
-Display::Display(Board* board) : board_(board) {}
+Display::Display() {}
 
 Display::~Display() {}
+
+void Display::SetBoard(Board* board) {
+	board_ = board;
+}
