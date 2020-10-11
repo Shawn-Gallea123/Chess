@@ -145,3 +145,11 @@ bool Board::CheckForChecks(Piece::Team team) {
 	}
 	return false;
 }
+
+void Board::SelectTile(int x, int y) {
+	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
+}
+
+const std::pair<int, int>* Board::GetSelectedTile() {
+	return selected_tile_.get();
+}

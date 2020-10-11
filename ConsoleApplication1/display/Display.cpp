@@ -1,5 +1,7 @@
 #include "Display.h"
 
+#include <GLFW/glfw3.h>
+
 Display::Display() {}
 
 Display::~Display() {}

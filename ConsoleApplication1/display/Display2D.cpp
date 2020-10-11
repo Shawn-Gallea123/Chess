@@ -1,6 +1,7 @@
 #include "Display2D.h"
 
 #include <fstream>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -48,9 +49,45 @@ namespace {
 			exit(1);
 		}
 	}
+
+	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+		Display2D* display = static_cast<Display2D*>(glfwGetWindowUserPointer(window));
+		if (!display) {
+			std::cerr << "Cannot cast window user pointer to Display2D";
+			exit(1);
+		}
+		if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+			display->SetShouldClose();
+		else if (key == GLFW_KEY_W && action == GLFW_PRESS)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+
+	void CursorPositionCallback(GLFWwindow* window, double x, double y) {
+		Display2D* display = static_cast<Display2D*>(glfwGetWindowUserPointer(window));
+		if (!display) {
+			std::cerr << "Cannot cast window user pointer to Display2D";
+			exit(1);
+		}
+		display->SetCursorPos(x, y);
+	}
+
+	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+		Display2D* display = static_cast<Display2D*>(glfwGetWindowUserPointer(window));
+		if (!display) {
+			std::cerr << "Cannot cast window user pointer to Display2D";
+			exit(1);
+		}
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+			display->OnClick();
+	}
+
 }
 
 Display2D::Display2D() {
+	glfwSetWindowUserPointer(window_, this);
+	glfwSetKeyCallback(window_, KeyCallback);
+	glfwSetCursorPosCallback(window_, CursorPositionCallback);
+	glfwSetMouseButtonCallback(window_, MouseButtonCallback);
 	CompileShaders();
 	glGenVertexArrays(1, &VAO_);
 	glBindVertexArray(VAO_);
@@ -71,7 +108,8 @@ Display2D::Display2D() {
 bool Display2D::DrawBoard() {
 	if (glfwWindowShouldClose(window_))
 		return false;
-	ProcessInput();
+	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_RELEASE)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glClearColor(0.0f, 0.0f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program_);
@@ -82,10 +120,18 @@ bool Display2D::DrawBoard() {
 	bool white_tile = false;
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
+			Piece* piece = board_->GetPiece(j, i);
+
 			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
 			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+
 			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
-			glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+			auto selected_tile = board_->GetSelectedTile();
+			if (selected_tile && selected_tile->first == j && selected_tile->second == i)
+				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
+			else
+				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+
 			int use_texture_location = glGetUniformLocation(shader_program_, "UseTexture");
 			glBindVertexArray(VAO_);
 
@@ -94,8 +140,7 @@ bool Display2D::DrawBoard() {
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 			// Draw piece
-			if (board_->GetPiece(j, i)) {
-				auto piece = board_->GetPiece(j, i);
+			if (piece) {
 				glUniform1i(use_texture_location, true);
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, piece->GetTexture());
@@ -150,11 +195,10 @@ void Display2D::CompileShaders() {
 	glDeleteShader(fragment_shader);
 }
 
-void Display2D::ProcessInput() {
-	if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window_, true);
-	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_RELEASE)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+void Display2D::OnClick() {
+	int tile_width = window_width_ / 8;
+	int tile_height = window_height_ / 8;
+	int tile_x = cursor_x_ / tile_width;
+	int tile_y = 7 - static_cast<int>((cursor_y_ / tile_height));
+	board_->SelectTile(tile_x, tile_y);
 }

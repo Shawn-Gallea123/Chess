@@ -13,6 +13,8 @@ public:
 	bool Move(int x, int y, int dest_x, int dest_y);
 	Piece* GetPiece(int x, int y) const;
 	bool CheckForChecks(Piece::Team team);
+	void SelectTile(int x, int y);
+	const std::pair<int, int>* GetSelectedTile();
 
 private:
 	void Setup();
@@ -30,4 +32,5 @@ private:
 	Piece* white_king_;
 	std::vector<Piece*> blacks_;
 	Piece* black_king_;
+	std::unique_ptr<std::pair<int, int>> selected_tile_;
 };
