@@ -35,3 +35,10 @@ std::vector<std::pair<int, int>> Knight::GetPossibleMovementSpots(const Board* b
 
 	return spots;
 }
+
+int Knight::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
+}

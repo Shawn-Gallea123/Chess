@@ -50,7 +50,6 @@ int Piece::GetY() {
 unsigned int Piece::Generate2DTexture(const std::string& path) {
 	unsigned int texture = 0;
 	glGenTextures(1, &texture);
-	std::cout << "Texture: " << texture << std::endl;
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -60,14 +59,16 @@ unsigned int Piece::Generate2DTexture(const std::string& path) {
 	// load and generate the texture
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+	stbi_set_flip_vertically_on_load(true);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{
 		std::cout << "Failed to load texture" << std::endl;
+		exit(1);
 	}
 	stbi_image_free(data);
 	return texture;

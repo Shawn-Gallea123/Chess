@@ -8,6 +8,7 @@ public:
 
 	char GetSymbol() override;
 	std::vector<std::pair<int, int>> GetPossibleMovementSpots(const Board* board, bool attacks_only) const override;
+	int GetTexture() override;
 
 private:
 	static int white_texture_;

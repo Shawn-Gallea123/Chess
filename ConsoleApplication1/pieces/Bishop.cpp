@@ -46,3 +46,10 @@ std::vector<std::pair<int, int>> Bishop::GetPossibleMovementSpots(const Board* b
 	}
 	return spots;
 }
+
+int Bishop::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
+}

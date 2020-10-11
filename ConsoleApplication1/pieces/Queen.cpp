@@ -67,3 +67,10 @@ std::vector<std::pair<int, int>> Queen::GetPossibleMovementSpots(const Board* bo
 
 	return spots;
 }
+
+int Queen::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
+}

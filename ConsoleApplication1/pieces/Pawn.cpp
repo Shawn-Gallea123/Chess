@@ -7,9 +7,9 @@ int Pawn::black_texture_ = -1;
 
 Pawn::Pawn(int x, int y, Team team) : Piece(x, y, team) {
 	if (white_texture_ == -1)
-		white_texture_ = Generate2DTexture("sprites/white_knight.png");
+		white_texture_ = Generate2DTexture("sprites/white_pawn.png");
 	if (black_texture_ == -1)
-		black_texture_ = Generate2DTexture("sprites/black_knight.png");
+		black_texture_ = Generate2DTexture("sprites/black_pawn.png");
 }
 
 char Pawn::GetSymbol() {
@@ -46,6 +46,13 @@ std::vector<std::pair<int, int>> Pawn::GetPossibleMovementSpots(const Board* boa
 	}
 
 	return spots;
+}
+
+int Pawn::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
 }
 
 void Pawn::OnMoved(int x, int y) {

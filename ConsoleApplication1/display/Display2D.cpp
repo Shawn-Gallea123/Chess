@@ -12,15 +12,14 @@
 
 namespace {
 	float tile_vertices[] = {
-		// Top Left
-		-0.125f, 0.125f, 0.0f,
+		// Top Left        // Texture coords
+		-0.125f, 0.125f, 0.0f, 0.0f, 1.0f,
 		// Top Right
-		0.125f, 0.125f, 0.0f,
+		0.125f, 0.125f, 0.0f, 1.0f, 1.0f,
 		// Bottom right
-		0.125f, -0.125f, 0.0f,
+		0.125f, -0.125f, 0.0f, 1.0f, 0.0f,
 		// Bottom left
-		-0.125f, -0.125f, 0.0f
-
+		-0.125f, -0.125f, 0.0f, 0.0f, 0.0f
 	};
 
 	unsigned int tile_indices[] = {
@@ -63,8 +62,10 @@ Display2D::Display2D() {
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(tile_indices), tile_indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 }
 
 bool Display2D::DrawBoard() {
@@ -84,12 +85,22 @@ bool Display2D::DrawBoard() {
 			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
 			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
 			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
-			if (board_->GetPiece(j, i))
-				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
-			else
-				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+			glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+			int use_texture_location = glGetUniformLocation(shader_program_, "UseTexture");
 			glBindVertexArray(VAO_);
+
+			// Draw tile
+			glUniform1i(use_texture_location, false);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			// Draw piece
+			if (board_->GetPiece(j, i)) {
+				auto piece = board_->GetPiece(j, i);
+				glUniform1i(use_texture_location, true);
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, piece->GetTexture());
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			}
 
 			if (j == 7) {
 				start = glm::translate(start, glm::vec3(0.0f, 0.25f, 0.0f));

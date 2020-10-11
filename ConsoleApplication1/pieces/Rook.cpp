@@ -46,3 +46,10 @@ std::vector<std::pair<int, int>> Rook::GetPossibleMovementSpots(const Board* boa
 
 	return spots;
 }
+
+int Rook::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
+}

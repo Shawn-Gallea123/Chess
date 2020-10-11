@@ -22,3 +22,10 @@ std::vector<std::pair<int, int>> King::GetPossibleMovementSpots(const Board* boa
 	CheckSpace(x_, y_ - 1, spots, board);
 	return spots;
 }
+
+int King::GetTexture() {
+	if (team_ == Team::WHITE)
+		return white_texture_;
+	else
+		return black_texture_;
+}

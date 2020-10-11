@@ -21,6 +21,7 @@ public:
 	virtual void OnMoved(int x, int y);
 	int GetX();
 	int GetY();
+	virtual int GetTexture() = 0;
 
 protected:
 	bool CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board) const;
