@@ -110,31 +110,45 @@ bool Display2D::DrawBoard() {
 		return false;
 	else if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_RELEASE)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glClearColor(0.0f, 0.0f, 0.7f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program_);
 
 	glm::mat4 M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(-0.875f, -0.875f, 0.0f));
+
 	glm::mat4 start = M;
 	bool white_tile = false;
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
 			Piece* piece = board_->GetPiece(j, i);
 
+			// Set tile colour.
 			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
-			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
 			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
-
-			// Draw selected tile as green.
 			auto selected_tile = board_->GetSelectedTile();
 			if (selected_tile && selected_tile->first == j && selected_tile->second == i) {
+				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
 				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
 			}
-			else if (selected_tile && IsAMovementSpot(j, i)) {
-				glUniform3f(tile_color_location, 0.0f, 0.7f, 0.0f);
+			else if (selected_tile && IsAMovementSpot(j, i, false)) {
+				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+				float colour;
+				if (white_tile) {
+					if (IsAMovementSpot(j, i, true) && piece)
+						glUniform3f(tile_color_location, 1.0f, 0.47f, 0.47f);
+					else
+						glUniform3f(tile_color_location, 0.47f, 1.0f, 0.53f);
+				}
+				else {
+					if (IsAMovementSpot(j, i, true) && piece)
+						glUniform3f(tile_color_location, 0.3f, 0.0f, 0.0f);
+					else
+						glUniform3f(tile_color_location, 0.0f, 0.3f, 0.0f);
+				}
 			}
 			else {
+				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
 				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
 			}
 
@@ -144,6 +158,9 @@ bool Display2D::DrawBoard() {
 			// Draw tile
 			glUniform1i(use_texture_location, false);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			// Reset scale to draw the piece
+
 
 			// Draw piece
 			if (piece) {
@@ -209,9 +226,9 @@ void Display2D::OnClick() {
 	board_->OnClick(tile_x, tile_y);
 }
 
-bool Display2D::IsAMovementSpot(int x, int y) {
+bool Display2D::IsAMovementSpot(int x, int y, bool attacking) {
 	auto selected_tile = board_->GetSelectedTile();
-	auto spots = board_->GetPiece(selected_tile->first, selected_tile->second)->GetPossibleMovementSpots(board_, false);
+	auto spots = board_->GetPiece(selected_tile->first, selected_tile->second)->GetPossibleMovementSpots(board_, attacking);
 
 	for (auto location : spots)
 		if (location.first == x && location.second == y)
