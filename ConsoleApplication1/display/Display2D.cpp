@@ -124,13 +124,19 @@ bool Display2D::DrawBoard() {
 
 			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
 			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
-
 			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
+
+			// Draw selected tile as green.
 			auto selected_tile = board_->GetSelectedTile();
-			if (selected_tile && selected_tile->first == j && selected_tile->second == i)
+			if (selected_tile && selected_tile->first == j && selected_tile->second == i) {
 				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
-			else
+			}
+			else if (selected_tile && IsAMovementSpot(j, i)) {
+				glUniform3f(tile_color_location, 0.0f, 0.7f, 0.0f);
+			}
+			else {
 				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
+			}
 
 			int use_texture_location = glGetUniformLocation(shader_program_, "UseTexture");
 			glBindVertexArray(VAO_);
@@ -200,5 +206,16 @@ void Display2D::OnClick() {
 	int tile_height = window_height_ / 8;
 	int tile_x = cursor_x_ / tile_width;
 	int tile_y = 7 - static_cast<int>((cursor_y_ / tile_height));
-	board_->SelectTile(tile_x, tile_y);
+	board_->OnClick(tile_x, tile_y);
+}
+
+bool Display2D::IsAMovementSpot(int x, int y) {
+	auto selected_tile = board_->GetSelectedTile();
+	auto spots = board_->GetPiece(selected_tile->first, selected_tile->second)->GetPossibleMovementSpots(board_, false);
+
+	for (auto location : spots)
+		if (location.first == x && location.second == y)
+			return true;
+
+	return false;
 }

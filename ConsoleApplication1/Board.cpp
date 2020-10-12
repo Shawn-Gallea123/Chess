@@ -146,8 +146,11 @@ bool Board::CheckForChecks(Piece::Team team) {
 	return false;
 }
 
-void Board::SelectTile(int x, int y) {
+void Board::OnClick(int x, int y) {
 	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
+	if (!board_[x][y] || board_[x][y]->GetTeam() != Piece::Team::WHITE) {
+		selected_tile_.reset();
+	}
 }
 
 const std::pair<int, int>* Board::GetSelectedTile() {

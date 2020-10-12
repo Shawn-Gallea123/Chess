@@ -13,7 +13,7 @@ public:
 	bool Move(int x, int y, int dest_x, int dest_y);
 	Piece* GetPiece(int x, int y) const;
 	bool CheckForChecks(Piece::Team team);
-	void SelectTile(int x, int y);
+	void OnClick(int x, int y);
 	const std::pair<int, int>* GetSelectedTile();
 
 private:

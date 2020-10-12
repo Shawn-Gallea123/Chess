@@ -13,6 +13,7 @@ public:
 
 private:
 	void CompileShaders();
+	bool IsAMovementSpot(int x, int y);
 
 	unsigned int VAO_;
 	unsigned int shader_program_;
