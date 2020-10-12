@@ -159,9 +159,6 @@ bool Display2D::DrawBoard() {
 			glUniform1i(use_texture_location, false);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-			// Reset scale to draw the piece
-
-
 			// Draw piece
 			if (piece) {
 				glUniform1i(use_texture_location, true);

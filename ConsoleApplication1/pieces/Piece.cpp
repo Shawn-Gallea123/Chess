@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "../Board.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "../stb/stb_image.h"
 
 #include <glad/glad.h>
@@ -59,7 +58,6 @@ unsigned int Piece::Generate2DTexture(const std::string& path) {
 	// load and generate the texture
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-	stbi_set_flip_vertically_on_load(true);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
