@@ -175,6 +175,7 @@
     <ClInclude Include="pieces\Queen.h" />
     <ClInclude Include="pieces\Rook.h" />
     <ClInclude Include="stb\stb_image.h" />
+    <ClInclude Include="util\GraphicsUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
