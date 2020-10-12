@@ -133,27 +133,8 @@ bool Display2D::DrawBoard() {
 }
 
 void Display2D::CompileShaders() {
-	// Vertex shader
-	std::ifstream vertex_file_text("shaders/2DVectorShader.txt");
-	std::string vertex_shader_text((std::istreambuf_iterator<char>(vertex_file_text)),
-		std::istreambuf_iterator<char>());
-	unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vertex_shader_source = vertex_shader_text.c_str();
-	glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-	glCompileShader(vertex_shader);
-	CheckShaderCompilation(vertex_shader);
-
-	// Fragment shader
-	std::ifstream fragment_file_text("shaders/2DFragmentShader.txt");
-	std::string fragment_shader_text((std::istreambuf_iterator<char>(fragment_file_text)),
-		std::istreambuf_iterator<char>());
-	unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fragment_shader_source = fragment_shader_text.c_str();
-	glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-	glCompileShader(fragment_shader);
-	CheckShaderCompilation(fragment_shader);
-
-	// Shader program
+	unsigned int vertex_shader = CompileShader("shaders/2DVectorShader.txt", GL_VERTEX_SHADER);
+	unsigned int fragment_shader = CompileShader("shaders/2DFragmentShader.txt", GL_FRAGMENT_SHADER);
 	shader_program_ = glCreateProgram();
 	glAttachShader(shader_program_, vertex_shader);
 	glAttachShader(shader_program_, fragment_shader);

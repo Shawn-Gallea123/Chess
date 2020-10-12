@@ -58,3 +58,15 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		display->OnClick();
 }
+
+unsigned int CompileShader(const std::string& shader_path, int type) {
+	std::ifstream file_text(shader_path);
+	std::string shader_text((std::istreambuf_iterator<char>(file_text)),
+		std::istreambuf_iterator<char>());
+	unsigned int shader = glCreateShader(type);
+	const char* shader_source = shader_text.c_str();
+	glShaderSource(shader, 1, &shader_source, NULL);
+	glCompileShader(shader);
+	CheckShaderCompilation(shader);
+	return shader;
+}
