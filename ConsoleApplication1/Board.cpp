@@ -147,6 +147,12 @@ bool Board::CheckForChecks(Piece::Team team) {
 }
 
 void Board::OnClick(int x, int y) {
+	auto previously_selected_piece = selected_tile_ ? board_[selected_tile_->first][selected_tile_->second] : nullptr;
+	if (previously_selected_piece && CanMove(x, y, previously_selected_piece)) {
+		Move(selected_tile_->first, selected_tile_->second, x, y);
+		selected_tile_.reset();
+		return;
+	}
 	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
 	if (!board_[x][y] || board_[x][y]->GetTeam() != Piece::Team::WHITE) {
 		selected_tile_.reset();

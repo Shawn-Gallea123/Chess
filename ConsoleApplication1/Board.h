@@ -27,6 +27,7 @@ private:
 
 	bool CanMove(int x, int y, const Piece* piece) const;
 
+
 	std::vector<std::vector<Piece*>> board_;
 	std::vector<Piece*> whites_;
 	Piece* white_king_;
