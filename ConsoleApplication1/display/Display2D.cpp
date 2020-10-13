@@ -128,7 +128,7 @@ bool Display2D::DrawBoard() {
 	}
 
 	glfwSwapBuffers(window_);
-	glfwPollEvents();
+	glfwWaitEvents();
 	return true;
 }
 

@@ -63,6 +63,9 @@
     <ClCompile Include="display\TextDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="display\DIsplay3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\GraphicsUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display\Display3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

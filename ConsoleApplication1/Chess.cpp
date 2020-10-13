@@ -13,18 +13,13 @@ Chess::Chess() : display_(std::make_unique<Display2D>()), board_(std::make_uniqu
 }
 
 void Chess::Run() {
-    display_->DrawBoard();
-    //ChooseDifficulty();
-
     while (true) {
-       // if (!WhiteTurn())
-       //     break;
-        if (!display_->DrawBoard())
-            break;
-        if (board_->CheckForChecks(Piece::Team::WHITE))
-            std::cout << "CHECK, white king must move." << std::endl;
-        if (board_->CheckForChecks(Piece::Team::BLACK))
-            std::cout << "CHECK, black king must move." << std::endl;
+            if (!display_->DrawBoard())
+                break;
+            if (board_->CheckForChecks(Piece::Team::WHITE))
+                std::cout << "CHECK, white king must move." << std::endl;
+            if (board_->CheckForChecks(Piece::Team::BLACK))
+                std::cout << "CHECK, black king must move." << std::endl;
     }
 }
 
