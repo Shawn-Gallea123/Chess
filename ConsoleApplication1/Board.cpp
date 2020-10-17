@@ -11,7 +11,8 @@
 #include "pieces/Queen.h"
 #include "pieces/King.h"
 
-Board::Board() {
+Board::Board(Opponent::Difficulty difficulty) 
+	: opponent_(std::make_unique<Opponent>(difficulty, this)){
 	board_.resize(8);
 	for (auto& column : board_)
 		column.resize(8);
@@ -151,6 +152,7 @@ void Board::OnClick(int x, int y) {
 	if (previously_selected_piece && CanMove(x, y, previously_selected_piece)) {
 		Move(selected_tile_->first, selected_tile_->second, x, y);
 		selected_tile_.reset();
+		opponent_->MakeMove();
 		return;
 	}
 	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
@@ -161,4 +163,8 @@ void Board::OnClick(int x, int y) {
 
 const std::pair<int, int>* Board::GetSelectedTile() {
 	return selected_tile_.get();
+}
+
+std::vector<Piece*> Board::GetBlacks() {
+	return blacks_;
 }

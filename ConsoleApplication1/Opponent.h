@@ -2,6 +2,8 @@
 
 class Board;
 
+#include <utility>
+
 class Opponent {
 public:
 	enum class Difficulty {
@@ -13,7 +15,11 @@ public:
 
 	Opponent(Difficulty difficulty, Board* board);
 
+	void MakeMove();
+
 private:
+	void RandomPieceRandomSpot(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
+
 	Difficulty difficulty_;
 	Board* board_;
 };

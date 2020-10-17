@@ -148,7 +148,7 @@ void Display2D::CompileShaders() {
 void Display2D::OnClick() {
 	int tile_width = window_width_ / 8;
 	int tile_height = window_height_ / 8;
-	int tile_x = cursor_x_ / tile_width;
+	int tile_x = static_cast<int>(cursor_x_ / tile_width);
 	int tile_y = 7 - static_cast<int>((cursor_y_ / tile_height));
 	board_->OnClick(tile_x, tile_y);
 }
