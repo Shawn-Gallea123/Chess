@@ -1,13 +1,14 @@
 #include "Display2D.h"
 
+#include <chrono>
 #include <fstream>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <streambuf>
 #include <string>
+#include <thread>
 
 #include "../Board.h"
 #include "../util/GraphicsUtils.h"
@@ -65,23 +66,25 @@ bool Display2D::DrawBoard() {
 
 	glm::mat4 M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(-0.875f, -0.875f, 0.0f));
-
 	glm::mat4 start = M;
 	bool white_tile = false;
+	unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
+	int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
+	auto selected_tile = board_->GetSelectedTile();
+	int use_texture_location = glGetUniformLocation(shader_program_, "UseTexture");
+
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
 			Piece* piece = board_->GetPiece(j, i);
 
 			// Set tile colour.
-			unsigned int model_trans_location = glGetUniformLocation(shader_program_, "M");
-			int tile_color_location = glGetUniformLocation(shader_program_, "TileColor");
-			auto selected_tile = board_->GetSelectedTile();
+			glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
 			if (selected_tile && selected_tile->first == j && selected_tile->second == i) {
-				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+				// Colour selected tile green.
 				glUniform3f(tile_color_location, 0.0f, 1.0f, 0.0f);
 			}
 			else if (selected_tile && IsAMovementSpot(j, i, false)) {
-				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+				// Colour movement spot
 				float colour;
 				if (white_tile) {
 					if (IsAMovementSpot(j, i, true) && piece)
@@ -97,11 +100,10 @@ bool Display2D::DrawBoard() {
 				}
 			}
 			else {
-				glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(M));
+				// Regular tile colour
 				glUniform3f(tile_color_location, white_tile, white_tile, white_tile);
 			}
 
-			int use_texture_location = glGetUniformLocation(shader_program_, "UseTexture");
 			glBindVertexArray(VAO_);
 
 			// Draw tile
@@ -117,6 +119,7 @@ bool Display2D::DrawBoard() {
 			}
 
 			if (j == 7) {
+				// TODO, make 0.25f constant, give it a name.
 				start = glm::translate(start, glm::vec3(0.0f, 0.25f, 0.0f));
 				M = start;
 			}
@@ -127,8 +130,33 @@ bool Display2D::DrawBoard() {
 		}
 	}
 
+	if (moving_piece_) {
+		glUniform1i(use_texture_location, true);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, moving_piece_->GetTexture());
+		glUniformMatrix4fv(model_trans_location, 1, GL_FALSE, glm::value_ptr(animating_mat_));
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		animating_frames_--;
+		std::cout << "Animating frames: " << animating_frames_ << std::endl;
+		if (animating_frames_ < 0) {
+			animating_ = false;
+			board_->SetPiece(moving_piece_, new_x_, new_y_);
+			moving_piece_ = nullptr;
+		}
+		else {
+			animating_mat_ = glm::translate(animating_mat_, glm::vec3(x_interval_, y_interval_, 0.0f));
+		}
+	}
+
 	glfwSwapBuffers(window_);
-	glfwWaitEvents();
+	if (animating_) {
+		//std::this_thread::sleep_for(std::chrono::milliseconds(17));
+		glfwPollEvents();
+	}
+	else {
+		glfwWaitEvents();
+	}
 	return true;
 }
 
@@ -146,11 +174,35 @@ void Display2D::CompileShaders() {
 }
 
 void Display2D::OnClick() {
+	if (animating_)
+		return;
+	auto selected_tile = board_->GetSelectedTile();
+	int original_x = 0;
+	int original_y = 0;
+	if (selected_tile) {
+		original_x = selected_tile->first;
+		original_y = selected_tile->second;
+	}
 	int tile_width = window_width_ / 8;
 	int tile_height = window_height_ / 8;
-	int tile_x = static_cast<int>(cursor_x_ / tile_width);
-	int tile_y = 7 - static_cast<int>((cursor_y_ / tile_height));
-	board_->OnClick(tile_x, tile_y);
+	new_x_ = static_cast<int>(cursor_x_ / tile_width);
+	new_y_ = 7 - static_cast<int>((cursor_y_ / tile_height));
+
+	bool was_piece_moved = board_->OnClick(new_x_, new_y_);
+	animating_ = was_piece_moved;
+	if (was_piece_moved) {
+		animating_frames_ = 60;
+		moving_piece_ = board_->PullPiece(new_x_, new_y_);
+		animating_mat_ = glm::mat4(1.0f);
+		animating_mat_ = glm::translate(animating_mat_, glm::vec3(-0.875f, -0.875f, 0.0f));
+		// Set matrix to be at original spot, <orig_x, orig_y>
+		animating_mat_ = glm::translate(animating_mat_, glm::vec3(original_x * 0.25f, original_y * 0.25f, 0.0f));
+		// Get distance to new spot, divide by 60, store x and y intervals (60 fps must be added)
+		float x_distance = (new_x_ - original_x) * 0.25f;
+		float y_distance = (new_y_ - original_y) * 0.25f;
+		x_interval_ = x_distance / 60;
+		y_interval_ = y_distance / 60;
+	}
 }
 
 bool Display2D::IsAMovementSpot(int x, int y, bool attacking) {

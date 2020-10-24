@@ -60,6 +60,16 @@ Piece* Board::GetPiece(int x, int y) const {
 	return board_[x][y];
 }
 
+Piece* Board::PullPiece(int x, int y) {
+	Piece* piece = board_[x][y];
+	board_[x][y] = nullptr;
+	return piece;
+}
+
+void Board::SetPiece(Piece* piece, int x, int y) {
+	board_[x][y] = piece;
+}
+
 void Board::Setup() {
 	AddPawns();
 	AddRooks();
@@ -147,18 +157,20 @@ bool Board::CheckForChecks(Piece::Team team) {
 	return false;
 }
 
-void Board::OnClick(int x, int y) {
+bool Board::OnClick(int x, int y) {
 	auto previously_selected_piece = selected_tile_ ? board_[selected_tile_->first][selected_tile_->second] : nullptr;
 	if (previously_selected_piece && CanMove(x, y, previously_selected_piece)) {
+		last_spot_ = std::pair<int, int>(selected_tile_->first, selected_tile_->second);
 		Move(selected_tile_->first, selected_tile_->second, x, y);
 		selected_tile_.reset();
 		opponent_->MakeMove();
-		return;
+		return true;
 	}
 	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
 	if (!board_[x][y] || board_[x][y]->GetTeam() != Piece::Team::WHITE) {
 		selected_tile_.reset();
 	}
+	return false;
 }
 
 const std::pair<int, int>* Board::GetSelectedTile() {
