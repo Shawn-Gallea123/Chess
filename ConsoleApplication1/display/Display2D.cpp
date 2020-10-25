@@ -31,6 +31,8 @@ namespace {
 		0, 2, 3
 	};
 
+	const int framerate = 15;
+
 }
 
 Display2D::Display2D() {
@@ -191,7 +193,7 @@ void Display2D::OnClick() {
 	bool was_piece_moved = board_->OnClick(new_x_, new_y_);
 	animating_ = was_piece_moved;
 	if (was_piece_moved) {
-		animating_frames_ = 60;
+		animating_frames_ = framerate;
 		moving_piece_ = board_->PullPiece(new_x_, new_y_);
 		animating_mat_ = glm::mat4(1.0f);
 		animating_mat_ = glm::translate(animating_mat_, glm::vec3(-0.875f, -0.875f, 0.0f));
@@ -200,8 +202,8 @@ void Display2D::OnClick() {
 		// Get distance to new spot, divide by 60, store x and y intervals (60 fps must be added)
 		float x_distance = (new_x_ - original_x) * 0.25f;
 		float y_distance = (new_y_ - original_y) * 0.25f;
-		x_interval_ = x_distance / 60;
-		y_interval_ = y_distance / 60;
+		x_interval_ = x_distance / framerate;
+		y_interval_ = y_distance / framerate;
 	}
 }
 
