@@ -140,7 +140,6 @@ bool Display2D::DrawBoard() {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		animating_frames_--;
-		std::cout << "Animating frames: " << animating_frames_ << std::endl;
 		if (animating_frames_ < 0) {
 			animating_ = false;
 			board_->SetPiece(moving_piece_, new_x_, new_y_);
