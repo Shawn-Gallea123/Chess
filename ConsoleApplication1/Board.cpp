@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 
+#include "display/Display.h"
 #include "pieces/Pawn.h"
 #include "pieces/Rook.h"
 #include "pieces/Knight.h"
@@ -11,8 +12,8 @@
 #include "pieces/Queen.h"
 #include "pieces/King.h"
 
-Board::Board(Opponent::Difficulty difficulty) 
-	: opponent_(std::make_unique<Opponent>(difficulty, this)){
+Board::Board(Opponent::Difficulty difficulty, Display* display) 
+	: opponent_(std::make_unique<Opponent>(difficulty, this)), display_(display) {
 	board_.resize(8);
 	for (auto& column : board_)
 		column.resize(8);
@@ -51,6 +52,7 @@ bool Board::Move(int x, int y, int dest_x, int dest_y) {
 			delete deleted_piece;
 		}
 
+		display_->OnPieceMoved(x, y, dest_x, dest_y);
 		return true;
 	}
 	return false;
@@ -160,10 +162,8 @@ bool Board::CheckForChecks(Piece::Team team) {
 bool Board::OnClick(int x, int y) {
 	auto previously_selected_piece = selected_tile_ ? board_[selected_tile_->first][selected_tile_->second] : nullptr;
 	if (previously_selected_piece && CanMove(x, y, previously_selected_piece)) {
-		last_spot_ = std::pair<int, int>(selected_tile_->first, selected_tile_->second);
 		Move(selected_tile_->first, selected_tile_->second, x, y);
 		selected_tile_.reset();
-		opponent_->MakeMove();
 		return true;
 	}
 	selected_tile_ = std::make_unique<std::pair<int, int>>(x, y);
@@ -179,4 +179,8 @@ const std::pair<int, int>* Board::GetSelectedTile() {
 
 std::vector<Piece*> Board::GetBlacks() {
 	return blacks_;
+}
+
+void Board::MoveOpponent() {
+	opponent_->MakeMove();
 }

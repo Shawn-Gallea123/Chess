@@ -143,7 +143,10 @@ bool Display2D::DrawBoard() {
 		if (animating_frames_ < 0) {
 			animating_ = false;
 			board_->SetPiece(moving_piece_, new_x_, new_y_);
-			moving_piece_ = nullptr;
+			if (moving_piece_->GetTeam() == Piece::Team::WHITE)
+				board_->MoveOpponent();
+			else
+				moving_piece_ = nullptr;
 		}
 		else {
 			animating_mat_ = glm::translate(animating_mat_, glm::vec3(x_interval_, y_interval_, 0.0f));
@@ -186,24 +189,25 @@ void Display2D::OnClick() {
 	}
 	int tile_width = window_width_ / 8;
 	int tile_height = window_height_ / 8;
-	new_x_ = static_cast<int>(cursor_x_ / tile_width);
-	new_y_ = 7 - static_cast<int>((cursor_y_ / tile_height));
 
-	bool was_piece_moved = board_->OnClick(new_x_, new_y_);
-	animating_ = was_piece_moved;
-	if (was_piece_moved) {
-		animating_frames_ = framerate;
-		moving_piece_ = board_->PullPiece(new_x_, new_y_);
-		animating_mat_ = glm::mat4(1.0f);
-		animating_mat_ = glm::translate(animating_mat_, glm::vec3(-0.875f, -0.875f, 0.0f));
-		// Set matrix to be at original spot, <orig_x, orig_y>
-		animating_mat_ = glm::translate(animating_mat_, glm::vec3(original_x * 0.25f, original_y * 0.25f, 0.0f));
-		// Get distance to new spot, divide by 60, store x and y intervals (60 fps must be added)
-		float x_distance = (new_x_ - original_x) * 0.25f;
-		float y_distance = (new_y_ - original_y) * 0.25f;
-		x_interval_ = x_distance / framerate;
-		y_interval_ = y_distance / framerate;
-	}
+	board_->OnClick(static_cast<int>(cursor_x_ / tile_width), 7 - static_cast<int>(cursor_y_ / tile_height));
+}
+
+void Display2D::OnPieceMoved(int x, int y, int dest_x, int dest_y) {
+	new_x_ = dest_x;
+	new_y_ = dest_y;
+	animating_ = true;
+	animating_frames_ = framerate;
+	moving_piece_ = board_->PullPiece(new_x_, new_y_);
+	animating_mat_ = glm::mat4(1.0f);
+	animating_mat_ = glm::translate(animating_mat_, glm::vec3(-0.875f, -0.875f, 0.0f));
+	// Set matrix to be at original spot, <orig_x, orig_y>
+	animating_mat_ = glm::translate(animating_mat_, glm::vec3(x * 0.25f, y * 0.25f, 0.0f));
+	// Get distance to new spot, divide by 60, store x and y intervals (60 fps must be added)
+	float x_distance = (dest_x - x) * 0.25f;
+	float y_distance = (dest_y - y) * 0.25f;
+	x_interval_ = x_distance / framerate;
+	y_interval_ = y_distance / framerate;
 }
 
 bool Display2D::IsAMovementSpot(int x, int y, bool attacking) {

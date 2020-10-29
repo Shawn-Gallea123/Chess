@@ -6,9 +6,11 @@
 #include "pieces/Piece.h"
 #include "Opponent.h"
 
+class Display;
+
 class Board {
 public:
-	Board(Opponent::Difficulty difficulty);
+	Board(Opponent::Difficulty difficulty, Display* display);
 	~Board();
 
 	// Moves piece on <x, y> to <dest_x, dest_y>.
@@ -21,6 +23,7 @@ public:
 	bool OnClick(int x, int y);
 	const std::pair<int, int>* GetSelectedTile();
 	std::vector<Piece*> GetBlacks();
+	void MoveOpponent();
 
 private:
 	void Setup();
@@ -41,5 +44,5 @@ private:
 	Piece* black_king_;
 	std::unique_ptr<std::pair<int, int>> selected_tile_;
 	std::unique_ptr<Opponent> opponent_;
-	std::pair<int, int> last_spot_ = std::pair<int, int>(0, 0);
+	Display* display_;
 };

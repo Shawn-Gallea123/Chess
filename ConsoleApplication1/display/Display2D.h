@@ -13,6 +13,7 @@ public:
 
 	bool DrawBoard() override;
 	void OnClick() override;
+	void OnPieceMoved(int x, int y, int dest_x, int dest_y) override;
 
 private:
 	void CompileShaders();
