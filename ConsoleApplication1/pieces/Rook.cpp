@@ -22,25 +22,25 @@ std::vector<std::pair<int, int>> Rook::GetPossibleMovementSpots(const Board* boa
 	
 	// Right
 	for (int x = x_ + 1; x < 8; ++x) {
-		if (!CheckSpace(x, y_, spots, board))
+		if (!CheckSpace(x, y_, spots, board, attacks_only))
 			break;
 	}
 
 	// Left
 	for (int x = x_ - 1; x >= 0; --x) {
-		if (!CheckSpace(x, y_, spots, board))
+		if (!CheckSpace(x, y_, spots, board, attacks_only))
 			break;
 	}
 
 	// Up
 	for (int y = y_ + 1; y < 8; ++y) {
-		if (!CheckSpace(x_, y, spots, board))
+		if (!CheckSpace(x_, y, spots, board, attacks_only))
 			break;
 	}
 
 	// Down
 	for (int y = y_ - 1; y >= 0; --y) {
-		if (!CheckSpace(x_, y, spots, board))
+		if (!CheckSpace(x_, y, spots, board, attacks_only))
 			break;
 	}
 

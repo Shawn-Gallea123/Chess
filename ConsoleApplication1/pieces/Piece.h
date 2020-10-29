@@ -24,7 +24,7 @@ public:
 	virtual int GetTexture() = 0;
 
 protected:
-	bool CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board) const;
+	bool CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board, bool attacks_only) const;
 	unsigned int Generate2DTexture(const std::string& path);
 
 	int x_;

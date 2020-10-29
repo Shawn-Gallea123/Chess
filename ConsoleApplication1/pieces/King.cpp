@@ -16,14 +16,14 @@ char King::GetSymbol() {
 
 std::vector<std::pair<int, int>> King::GetPossibleMovementSpots(const Board* board, bool attacks_only) const {
 	std::vector<std::pair<int, int>> spots;
-	CheckSpace(x_, y_ + 1, spots, board); // top
-	CheckSpace(x_ + 1, y_ + 1, spots, board); // top-right
-	CheckSpace(x_ + 1, y_, spots, board); // right
-	CheckSpace(x_ + 1, y_ - 1, spots, board); // bottom-right
-	CheckSpace(x_, y_ - 1, spots, board); // bottom
-	CheckSpace(x_ - 1, y_ - 1, spots, board); // bottom-left
-	CheckSpace(x_ - 1, y_, spots, board); // left
-	CheckSpace(x_ - 1, y_ + 1, spots, board); // top-left
+	CheckSpace(x_, y_ + 1, spots, board, attacks_only); // top
+	CheckSpace(x_ + 1, y_ + 1, spots, board, attacks_only); // top-right
+	CheckSpace(x_ + 1, y_, spots, board, attacks_only); // right
+	CheckSpace(x_ + 1, y_ - 1, spots, board, attacks_only); // bottom-right
+	CheckSpace(x_, y_ - 1, spots, board, attacks_only); // bottom
+	CheckSpace(x_ - 1, y_ - 1, spots, board, attacks_only); // bottom-left
+	CheckSpace(x_ - 1, y_, spots, board, attacks_only); // left
+	CheckSpace(x_ - 1, y_ + 1, spots, board, attacks_only); // top-left
 	return spots;
 }
 

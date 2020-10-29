@@ -21,7 +21,7 @@ void Piece::OnMoved(int x, int y) {
 	y_ = y;
 }
 
-bool Piece::CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board) const {
+bool Piece::CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, const Board* board, bool attacks_only) const {
 	if (x < 0 || x > 7 || y < 0 || y > 7)
 		return false;
 	Piece* piece = board->GetPiece(x, y);
@@ -30,12 +30,12 @@ bool Piece::CheckSpace(int x, int y, std::vector<std::pair<int, int>>& spots, co
 		return false;
 	}
 	else if (!piece) {
+		if (attacks_only)
+			return false;
 		spots.emplace_back(x, y);
 		return true;
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 int Piece::GetX() {

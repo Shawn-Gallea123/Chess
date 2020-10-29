@@ -18,20 +18,20 @@ std::vector<std::pair<int, int>> Knight::GetPossibleMovementSpots(const Board* b
 	std::vector<std::pair<int, int>> spots;
 
 	// Right
-	CheckSpace(x_ + 2, y_ + 1, spots, board);
-	CheckSpace(x_ + 2, y_ - 1, spots, board);
+	CheckSpace(x_ + 2, y_ + 1, spots, board, attacks_only);
+	CheckSpace(x_ + 2, y_ - 1, spots, board, attacks_only);
 
 	// Up
-	CheckSpace(x_ + 1, y_ + 2, spots, board);
-	CheckSpace(x_ - 1, y_ + 2, spots, board);
+	CheckSpace(x_ + 1, y_ + 2, spots, board, attacks_only);
+	CheckSpace(x_ - 1, y_ + 2, spots, board, attacks_only);
 
 	// Left
-	CheckSpace(x_ - 2, y_ + 1, spots, board);
-	CheckSpace(x_ - 2, y_ - 1, spots, board);
+	CheckSpace(x_ - 2, y_ + 1, spots, board, attacks_only);
+	CheckSpace(x_ - 2, y_ - 1, spots, board, attacks_only);
 
 	// Down
-	CheckSpace(x_ - 1, y_ - 2, spots, board);
-	CheckSpace(x_ + 1, y_ - 2, spots, board);
+	CheckSpace(x_ - 1, y_ - 2, spots, board, attacks_only);
+	CheckSpace(x_ + 1, y_ - 2, spots, board, attacks_only);
 
 	return spots;
 }

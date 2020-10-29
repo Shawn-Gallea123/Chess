@@ -23,25 +23,25 @@ std::vector<std::pair<int, int>> Bishop::GetPossibleMovementSpots(const Board* b
 	
 	// North-West
 	for (int x = x_ + 1, y = y_ + 1; x < 8 && y < 8; ++x, ++y) {
-		if (!CheckSpace(x, y, spots, board))
+		if (!CheckSpace(x, y, spots, board, attacks_only))
 			break;
 	}
 
 	// South-East
 	for (int x = x_ + 1, y = y_ - 1; x < 8 && y >= 0; ++x, --y) {
-		if (!CheckSpace(x, y, spots, board))
+		if (!CheckSpace(x, y, spots, board, attacks_only))
 			break;
 	}
 
 	// South-West
 	for (int x = x_ - 1, y = y_ - 1; x >= 0 && y >= 0; --x, --y) {
-		if (!CheckSpace(x, y, spots, board))
+		if (!CheckSpace(x, y, spots, board, attacks_only))
 			break;
 	}
 
 	// North-West
 	for (int x = x_ - 1, y = y_ + 1; x >= 0 && y < 8; --x, ++y) {
-		if (!CheckSpace(x, y, spots, board))
+		if (!CheckSpace(x, y, spots, board, attacks_only))
 			break;
 	}
 	return spots;
