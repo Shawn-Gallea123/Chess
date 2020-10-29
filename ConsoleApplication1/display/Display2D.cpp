@@ -88,18 +88,12 @@ bool Display2D::DrawBoard() {
 			else if (selected_tile && IsAMovementSpot(j, i, false)) {
 				// Colour movement spot
 				float colour;
-				if (white_tile) {
-					if (IsAMovementSpot(j, i, true) && piece)
-						glUniform3f(tile_color_location, 1.0f, 0.47f, 0.47f);
-					else
-						glUniform3f(tile_color_location, 0.47f, 1.0f, 0.53f);
-				}
-				else {
-					if (IsAMovementSpot(j, i, true) && piece)
-						glUniform3f(tile_color_location, 0.3f, 0.0f, 0.0f);
-					else
-						glUniform3f(tile_color_location, 0.0f, 0.3f, 0.0f);
-				}
+				if (IsAMovementSpot(j, i, true) && piece)
+					glUniform3f(tile_color_location, 1.0f, 0.0f, 0.0f);
+				else if (white_tile)
+					glUniform3f(tile_color_location, 0.47f, 1.0f, 0.53f);
+				else
+					glUniform3f(tile_color_location, 0.0f, 0.3f, 0.0f);
 			}
 			else {
 				// Regular tile colour
@@ -132,6 +126,7 @@ bool Display2D::DrawBoard() {
 		}
 	}
 
+	bool final_animating_frame = false;
 	if (moving_piece_) {
 		glUniform1i(use_texture_location, true);
 		glActiveTexture(GL_TEXTURE0);
@@ -143,17 +138,24 @@ bool Display2D::DrawBoard() {
 		if (animating_frames_ < 0) {
 			animating_ = false;
 			board_->SetPiece(moving_piece_, new_x_, new_y_);
-			if (moving_piece_->GetTeam() == Piece::Team::WHITE)
+			if (moving_piece_->GetTeam() == Piece::Team::WHITE) {
+				final_animating_frame = true;
+				glfwSwapBuffers(window_);
+				std::this_thread::sleep_for(std::chrono::milliseconds(500));
 				board_->MoveOpponent();
-			else
+			}
+			else {
 				moving_piece_ = nullptr;
+			}
 		}
 		else {
 			animating_mat_ = glm::translate(animating_mat_, glm::vec3(x_interval_, y_interval_, 0.0f));
 		}
 	}
 
-	glfwSwapBuffers(window_);
+	if (!final_animating_frame)
+		glfwSwapBuffers(window_);
+
 	if (animating_) {
 		//std::this_thread::sleep_for(std::chrono::milliseconds(17));
 		glfwPollEvents();
