@@ -141,7 +141,7 @@ bool Display2D::DrawBoard() {
 			if (moving_piece_->GetTeam() == Piece::Team::WHITE) {
 				final_animating_frame = true;
 				glfwSwapBuffers(window_);
-				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				board_->MoveOpponent();
 			}
 			else {
