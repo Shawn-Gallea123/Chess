@@ -18,7 +18,7 @@ public:
 	void MakeMove();
 
 private:
-	void RandomPieceRandomSpot(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
+	bool RandomPieceRandomSpot(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
 
 	Difficulty difficulty_;
 	Board* board_;
