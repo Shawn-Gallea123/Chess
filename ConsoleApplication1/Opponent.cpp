@@ -21,6 +21,8 @@ void Opponent::MakeMove() {
 			return;
 		break;
 	case Opponent::Difficulty::HARD:
+		if (!FavourAttacks(starting_spot, destination_spot))
+			return;
 		break;
 	case Opponent::Difficulty::EXPERT:
 		break;
@@ -56,9 +58,7 @@ bool Opponent::RandomPieceFavourAttacks(std::pair<int, int>& starting_spot, std:
 		int random_piece_index = rand() % blacks.size();
 		auto random_piece = blacks.at(random_piece_index);
 
-		// TODO: Implement this for all pieces, Pawn is currently implemented.
 		auto attack_spots = random_piece->GetPossibleMovementSpots(board_, true);
-
 		auto movement_spots = random_piece->GetPossibleMovementSpots(board_, false);
 
 		if (attack_spots.size() == 0 && movement_spots.size() == 0) {
@@ -71,5 +71,33 @@ bool Opponent::RandomPieceFavourAttacks(std::pair<int, int>& starting_spot, std:
 			destination_spot = std::pair<int, int>(random_spot.first, random_spot.second);
 			return true;
 		}
+	}
+}
+
+bool Opponent::FavourAttacks(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot) {
+	auto blacks = board_->GetBlacks();
+	std::vector<Piece*> attackable_pieces;
+
+	for (auto piece : blacks) {
+		if (!piece->GetPossibleMovementSpots(board_, true).empty()) {
+			attackable_pieces.emplace_back(piece);
+		}
+	}
+
+	if (attackable_pieces.empty())
+		return RandomPieceRandomSpot(starting_spot, destination_spot);
+	
+	while (true) {
+		if (attackable_pieces.size() == 0)
+			return false;
+		int random_piece_index = rand() % attackable_pieces.size();
+		auto random_attackable_piece = attackable_pieces.at(random_piece_index);
+
+		auto attack_spots = random_attackable_piece->GetPossibleMovementSpots(board_, true);
+
+			auto random_spot = attack_spots.at(rand() % attack_spots.size());
+			starting_spot = std::pair<int, int>(random_attackable_piece->GetX(), random_attackable_piece->GetY());
+			destination_spot = std::pair<int, int>(random_spot.first, random_spot.second);
+			return true;
 	}
 }

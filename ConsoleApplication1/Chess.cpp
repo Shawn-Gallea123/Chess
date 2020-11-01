@@ -8,7 +8,7 @@
 #include "display/Display2D.h"
 #include "display/TextDisplay.h"
 
-Chess::Chess() : display_(std::make_unique<Display2D>()), board_(std::make_unique<Board>(Opponent::Difficulty::MEDIUM, display_.get())) {
+Chess::Chess() : display_(std::make_unique<Display2D>()), board_(std::make_unique<Board>(Opponent::Difficulty::HARD, display_.get())) {
     display_->SetBoard(board_.get());
 }
 

@@ -20,6 +20,7 @@ public:
 private:
 	bool RandomPieceRandomSpot(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
 	bool RandomPieceFavourAttacks(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
+	bool FavourAttacks(std::pair<int, int>& starting_spot, std::pair<int, int>& destination_spot);
 
 	Difficulty difficulty_;
 	Board* board_;
